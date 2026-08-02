@@ -1,0 +1,5 @@
+"Metamod Plugin"
+{
+    "alias"    "hl2mp_shutdown_fix"
+    "file"     "addons/hl2mp_shutdown_fix/bin/hl2mp_shutdown_fix"
+}
