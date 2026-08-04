@@ -1,19 +1,26 @@
-/mnt/data/hl2mp-shutdown-fix-mms-x64-1.2.1/package/addons/hl2mp_shutdown_fix/bin/hl2mp_shutdown_fix.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=7a1689d8fddef82934e4a7798b1597998c24edfd, stripped
+package/addons/srcds_shutdown_fix/bin/srcds_shutdown_fix.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=e534864052b397274096139309394134016700db, stripped
 
-    Build ID: 7a1689d8fddef82934e4a7798b1597998c24edfd
+Build ID: e534864052b397274096139309394134016700db
+SHA-256: 3b11ee313f78c3c2e205142f2fb0b3729fa446978ee22fe059a0dadaa347a61c
 
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+Runtime dependencies:
+libc.so.6
 
-0000000000002030 T CreateInterface_MMS
-0000000000002150 T UnloadInterface_MMS
+Exports:
+CreateInterface_MMS
+UnloadInterface_MMS
 
-GLIBC_2.2.5
+Maximum GLIBC requirement: GLIBC_2.2.5
 
 Metadata:
-Name: HL2MP Shutdown Fix
+Name: SRCDS Shutdown Fix
 Author: Peter Brev
-Version: 1.2.1
+Version: 1.3.0
 
 Runtime output:
-[META] Loaded HL2MP Shutdown Fix
-[META] HL2MP Shutdown Fix unloaded, but retaining shutdown fix!
+[META] Loaded SRCDS Shutdown Fix
+[META] SRCDS Shutdown Fix unloaded, but retaining shutdown fix!
+
+Scope:
+No Metamod engine-provider or game-directory restriction.
+The loaded dedicated_srv.so relocation and provider checks remain mandatory.

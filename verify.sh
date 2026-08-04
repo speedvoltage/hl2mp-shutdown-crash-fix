@@ -2,7 +2,7 @@
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")" && pwd)"
-plugin="$root/package/addons/hl2mp_shutdown_fix/bin/hl2mp_shutdown_fix.so"
+plugin="$root/package/addons/srcds_shutdown_fix/bin/srcds_shutdown_fix.so"
 
 cd "$root"
 sha256sum -c CHECKSUMS.sha256

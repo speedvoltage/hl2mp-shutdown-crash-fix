@@ -1,0 +1,5 @@
+"Metamod Plugin"
+{
+    "alias"    "srcds_shutdown_fix"
+    "file"     "addons/srcds_shutdown_fix/bin/srcds_shutdown_fix"
+}

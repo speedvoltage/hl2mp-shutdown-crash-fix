@@ -1,26 +1,28 @@
-# HL2MP Shutdown Fix 1.2.1
+# SRCDS Shutdown Fix 1.3.0
 
-A Metamod:Source plugin that fixes a Linux Half-Life 2: Deathmatch server crash during shutdown.
+A Metamod:Source plugin that fixes a Linux x86-64 Source dedicated server crash during shutdown.
 
 ## The problem
 
-On some Linux x86-64 HL2DM servers, running:
+On affected servers, running:
 
 ```text
 quit
 ```
 
-causes SRCDS to abort or crash instead of shutting down normally.
+causes SRCDS to abort during cancellation of the dedicated console thread. The loaded `dedicated_srv.so` has resolved `__gxx_personality_v0` to the copy exported by `libsteam_api.so` instead of the implementation in `libstdc++.so.6`.
 
-This plugin corrects the underlying problem and allows the server to exit cleanly.
+This plugin corrects that one resolved relocation and allows the server to exit normally.
 
 ## Requirements
 
 * Linux x86-64
-* Half-Life 2: Deathmatch dedicated server
+* A Source dedicated server using `dedicated_srv.so`
 * Metamod:Source
 
-The plugin only loads on a compatible HL2DM server. If the expected problem is not found, it refuses to make any changes.
+Version 1.3.0 is not restricted to the HL2DM Metamod engine provider or the `hl2mp` game directory. It can load under any Metamod engine provider and game directory.
+
+The plugin still refuses to modify anything unless it finds the expected x86-64 relocation in the loaded `dedicated_srv.so` and its current target is either the known bad `libsteam_api.so` provider or the already-correct `libstdc++.so.6` provider.
 
 ## Installation
 
@@ -28,23 +30,21 @@ Extract the release archive:
 
 ```bash
 cd /tmp
-tar -xzf ~/Downloads/hl2mp-shutdown-fix-mms-x64-1.2.1.tar.gz
-cd hl2mp-shutdown-fix-mms-x64-1.2.1
+tar -xzf ~/Downloads/srcds-shutdown-fix-mms-x64-1.3.0.tar.gz
+cd srcds-shutdown-fix-mms-x64-1.3.0
 ```
 
-Optinally, verify the package:
+Optionally verify the package:
 
 ```bash
 ./verify.sh
 ```
 
-Install it into your HL2DM server, for example:
+Install it into the game directory, for example:
 
 ```bash
-sudo ./install.sh /home/user/servers/hl2dm-serverfiles/hl2mp
+sudo ./install.sh /home/user/servers/css-server/cstrike
 ```
-
-Replace the path with the location of your own `hl2mp` directory.
 
 Restart the server and check that the plugin loaded:
 
@@ -55,7 +55,7 @@ meta list
 You should see:
 
 ```text
-[META] Loaded HL2MP Shutdown Fix
+[META] Loaded SRCDS Shutdown Fix
 ```
 
 ## Testing the fix
@@ -72,22 +72,18 @@ A successful shutdown ends with:
 Server Quit
 ```
 
-The server should exit without aborting or crashing.
-
-## How it works
-
-The plugin corrects one incorrect function reference inside the loaded HL2DM dedicated-server library.
+The process should exit without aborting or crashing.
 
 ## Building
 
 ```bash
-./build.sh /path/to/hl2dm-src
+./build.sh /path/to/source-sdk-2013/src
 ```
 
 ## Tests
 
 ```bash
-HL2SDK=/path/to/hl2dm-src ./tests/run.sh
+HL2SDK=/path/to/source-sdk-2013/src ./tests/run.sh
 ```
 
 ## Author

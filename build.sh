@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [[ $# -ne 1 ]]; then
-    printf 'Usage: %s /path/to/hl2dm-src\n' "$0" >&2
+    printf 'Usage: %s /path/to/source-sdk-src\n' "$0" >&2
     exit 2
 fi
 

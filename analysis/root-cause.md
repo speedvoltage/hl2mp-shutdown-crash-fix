@@ -23,14 +23,14 @@ The abort occurs during forced unwinding immediately after a successful `pthread
 
 ## x64 binary relationship
 
-The supplied x64 `libsteam_api.so`:
+The affected x64 `libsteam_api.so`:
 
 ```text
 Build ID: cabfeba9268918058d43dc9d95d8f6a170fad2e8
 GLOBAL DEFAULT __gxx_personality_v0
 ```
 
-The supplied x64 `dedicated_srv.so`:
+The affected x64 `dedicated_srv.so`:
 
 ```text
 Build ID: d81f696009ba749ac36fc9e88d43385f1effdcd3
@@ -60,3 +60,7 @@ Any of these would solve the defect at its source:
 3. Link the x64 components so the dedicated relocation resolves to `libstdc++.so.6`.
 
 The plugin implements the narrow runtime equivalent of option 2 by changing only the dedicated module's resolved relocation slot.
+
+## Game-provider scope
+
+The defect and runtime correction are in the shared Linux x86-64 dedicated launcher module, not in HL2DM GameDLL code. Version 1.3.0 therefore removes the Metamod engine-provider and game-directory restrictions. Runtime relocation and provider validation remain authoritative.
