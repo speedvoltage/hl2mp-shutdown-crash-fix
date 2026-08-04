@@ -63,8 +63,8 @@ int main(int argc, char **argv)
     if (!createInterface)
         return 6;
 
-    MetamodVersionInfo version{17, 0, 5, 5, 15, 17, SOURCE_ENGINE_HL2DM, "hl2mp"};
-    MetamodLoaderInfo loader{"hl2mp_shutdown_fix", argv[3]};
+    MetamodVersionInfo version{17, 0, 5, 5, 15, 17, 999, "cstrike"};
+    MetamodLoaderInfo loader{"srcds_shutdown_fix", argv[3]};
     SourceMM::ISmmPlugin *plugin = createInterface(&version, &loader);
     MockApi api;
     char error[512]{};
@@ -76,8 +76,8 @@ int main(int argc, char **argv)
     }
 
     if (strcmp(plugin->GetAuthor(), "Peter Brev") != 0 ||
-        strcmp(plugin->GetName(), "HL2MP Shutdown Fix") != 0 ||
-        strcmp(plugin->GetVersion(), "1.2.1") != 0)
+        strcmp(plugin->GetName(), "SRCDS Shutdown Fix") != 0 ||
+        strcmp(plugin->GetVersion(), "1.3.0") != 0)
     {
         return 12;
     }

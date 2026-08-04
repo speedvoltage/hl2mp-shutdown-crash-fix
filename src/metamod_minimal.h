@@ -3,7 +3,6 @@
 #include <cstddef>
 #include "tier1/interface.h"
 
-#define SOURCE_ENGINE_HL2DM 15
 #define METAMOD_PLAPI_VERSION 17
 
 class CGlobalVars;
