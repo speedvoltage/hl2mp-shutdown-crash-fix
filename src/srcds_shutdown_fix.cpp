@@ -504,11 +504,13 @@ extern "C" __attribute__((visibility("default"))) SourceMM::ISmmPlugin *CreateIn
         return nullptr;
 
     int limits[2];
-    const size_t offset = api[1] == 0 ? offsetof(MetamodVersionInfo, pl_min) : sizeof(api);
-    memcpy(limits, static_cast<const unsigned char *>(version) + offset, sizeof(limits));
-    const int supported = api[1] == 0 ? 17 : 18;
+    memcpy(limits, static_cast<const unsigned char *>(version) + sizeof(api), sizeof(limits));
+    const bool sourceHook = api[1] == 0 || (limits[0] == 5 && limits[1] == 5);
+    if (sourceHook)
+        memcpy(limits, static_cast<const unsigned char *>(version) + offsetof(MetamodVersionInfo, pl_min), sizeof(limits));
+    const int supported = sourceHook ? 17 : 18;
     const int selected = limits[1] < supported ? limits[1] : supported;
-    if (limits[0] > limits[1] || selected < limits[0] || selected < (api[1] == 0 ? 16 : 18))
+    if (limits[0] > limits[1] || selected < limits[0] || selected < (sourceHook ? 16 : 18))
         return nullptr;
 
     g_PluginApiVersion = selected;

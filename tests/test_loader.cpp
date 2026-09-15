@@ -67,6 +67,13 @@ int main(int argc, char **argv)
             if (advanced(&version, &loader) != plugin)
                 return 9;
         }
+        else if (strcmp(argv[4], "sourcehook21") == 0)
+        {
+            expectedApi = 17;
+            MetamodVersionInfo version{2, 1, 5, 5, 14, 17, 17, "tf2classified"};
+            if (advanced(&version, &loader) != plugin)
+                return 18;
+        }
         else if (strcmp(argv[4], "modern18") == 0)
         {
             expectedApi = 18;
