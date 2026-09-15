@@ -105,7 +105,7 @@ int main(int argc, char **argv)
             fprintf(stderr, "Load failed: %s\n", error);
             return 15;
         }
-        if (strcmp(plugin->GetVersion(), "1.3.1") != 0 || getPersonality() != goodPersonality ||
+        if (strcmp(plugin->GetVersion(), "1.3.2") != 0 || getPersonality() != goodPersonality ||
             !plugin->QueryRunning(error, sizeof(error)) || !plugin->Unload(error, sizeof(error)))
             return 16;
 

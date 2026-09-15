@@ -89,7 +89,7 @@ void operator delete[](void *memory, size_t) noexcept
 
 namespace
 {
-constexpr const char *kVersion = "1.3.1";
+constexpr const char *kVersion = "1.3.2";
 constexpr const char *kDedicatedModuleName = "dedicated_srv.so";
 constexpr const char *kPersonalitySymbol = "__gxx_personality_v0";
 constexpr const char *kBadProviderName = "libsteam_api.so";
