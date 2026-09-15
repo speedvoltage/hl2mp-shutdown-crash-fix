@@ -1,5 +1,6 @@
 {
     global:
+        CreateInterface;
         CreateInterface_MMS;
         UnloadInterface_MMS;
     local:
