@@ -1,0 +1,5 @@
+/build/
+/tests/build/
+__pycache__/
+*.so
+*.debug

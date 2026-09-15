@@ -22,3 +22,4 @@ for mode in classic legacy16 legacy17 modern18 unsupported; do
 done
 rm -rf "$build"
 printf 'All Metamod loader and relocation tests passed.\n'
+"$root/tests/run-metamod.sh" "${METAMOD_SDK:-hl2dm}"

@@ -1,0 +1,78 @@
+{
+    "name": "pvkii",
+    "env_var": "HL2SDKPVKII",
+    "extension": "2.pvkii",
+    "code": 10,
+    "define": "PVKII",
+    "steam": {
+        "app_id": 17575
+    },
+    "platforms": {
+        "windows": [
+            "x86",
+            "x86_64"
+        ],
+        "linux": [
+            "x86",
+            "x86_64"
+        ]
+    },
+    "source2": false,
+    "include_paths": [
+        "public",
+        "public/engine",
+        "public/mathlib",
+        "public/vstdlib",
+        "public/tier0",
+        "public/tier1",
+        "public/toolframework",
+        "public/game/server",
+        "game/shared",
+        "common"
+    ],
+    "linux": {
+        "defines": [
+            "NO_HOOK_MALLOC",
+            "NO_MALLOC_OVERRIDE"
+        ],
+        "cflags": ["-fPIC"],
+        "cxxflags": ["-std=c++17"],
+        "x86": {
+            "cflags": ["-march=pentium4", "-march=core2", "-msse2", "-mfpmath=sse"],
+            "dynamic_libs": [
+                "lib/public/linux/libtier0.so",
+                "lib/public/linux/libvstdlib.so"
+            ]
+        },
+        "x86_64": {
+            "cflags": ["-march=nocona", "-march=core2"],
+            "dynamic_libs": [
+                "lib/public/linux64/libtier0.so",
+                "lib/public/linux64/libvstdlib.so"
+            ]
+        },
+        "uses_system_cxxlib": false
+    },
+    "metamod": {
+        "linux": {
+            "linkflags": [
+                "-lstdc++"
+            ]
+        }
+    },
+    "windows": {
+        "cxxflags": ["/std:c++17"],
+        "x86": {
+            "libs": [
+                "lib/public/x86/tier0.lib",
+                "lib/public/x86/vstdlib.lib"
+            ]
+        },
+        "x86_64": {
+            "libs": [
+                "lib/public/x64/tier0.lib",
+                "lib/public/x64/vstdlib.lib"
+            ]
+        }
+    }
+}

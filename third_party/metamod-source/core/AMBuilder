@@ -1,0 +1,45 @@
+# vim: set sts=2 ts=8 sw=2 tw=99 et ft=python: 
+import os
+
+for sdk_target in MMS.sdk_targets:
+  sdk = sdk_target.sdk
+  cxx = sdk_target.cxx
+  
+  name = 'metamod.' + sdk['extension']
+  binary = MMS.HL2Library(builder, cxx, name, sdk)
+  binary.compiler.cxxincludes += [os.path.join(builder.sourcePath, 'third_party', 'khook', 'include')]
+
+  binary.compiler.defines += ['KHOOK_STANDALONE', 'KHOOK_EXPORT']
+  for task in MMS.libkhook:
+    if task.target.arch == binary.compiler.target.arch:
+      binary.compiler.linkflags += [task.binary]
+  for task in MMS.libsafetyhook:
+    if task.target.arch == binary.compiler.target.arch:
+      binary.compiler.linkflags += [task.binary]
+
+  binary.sources += [
+    'metamod.cpp',
+    'metamod_console.cpp',
+    'metamod_oslink.cpp',
+    'metamod_plugins.cpp',
+    'metamod_util.cpp',
+    'provider/provider_base.cpp',
+    'gamedll_bridge.cpp'
+  ]
+
+  if sdk.get('source2', False):
+    binary.sources += [
+      'provider/source2/provider_source2.cpp',
+    ]
+    binary.custom = [builder.tools.Protoc(protoc = sdk_target.protoc, sources = [
+      os.path.join(sdk['path'], 'common', 'network_connection.proto'),
+    ])]
+  else:
+    binary.sources += [
+      'provider/source/provider_source.cpp',
+      'provider/source/provider_source_console.cpp',
+      'vsp_bridge.cpp'
+      ]
+    binary.compiler.defines += ['_ALLOW_KEYWORD_MACROS']
+  nodes = builder.Add(binary)
+  MMS.binaries += [nodes]

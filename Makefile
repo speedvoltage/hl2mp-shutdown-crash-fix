@@ -1,6 +1,7 @@
 CXX ?= g++
 CC ?= gcc
 HL2SDK ?= ../source-sdk-2013/src
+METAMOD_SDK ?= hl2dm
 
 TARGET := build/srcds_shutdown_fix.so
 SOURCES := src/srcds_shutdown_fix.cpp
@@ -12,7 +13,12 @@ CXXFLAGS := -std=c++17 -m64 -O2 -g -fPIC -fvisibility=hidden -fno-exceptions -fn
 LDFLAGS := -shared -m64 -Wl,-z,defs -Wl,-z,relro,-z,now -Wl,--version-script=src/exports.map
 LIBS := -Wl,--no-as-needed -l:libdl.so.2 -Wl,--as-needed
 
-all: $(TARGET)
+all: plugin metamod
+
+plugin: $(TARGET)
+
+metamod:
+	./build-metamod.sh "$(HL2SDK)" "$(METAMOD_SDK)"
 
 build:
 	mkdir -p build
@@ -26,4 +32,4 @@ $(TARGET): $(OBJECTS) src/exports.map
 clean:
 	rm -rf build
 
-.PHONY: all clean
+.PHONY: all plugin metamod clean

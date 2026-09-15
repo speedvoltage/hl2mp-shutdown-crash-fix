@@ -1,0 +1,27 @@
+import os
+
+def AddSourceFilesFromDir(path, files):
+  list = []
+  for file in files:
+    list.append(os.path.join(path, file))
+  return list
+
+libkhook = builder.StaticLibraryProject('khook')
+libkhook.sources = AddSourceFilesFromDir(os.path.join(builder.currentSourcePath, 'src'),[
+  "detour.cpp",
+  "ranges.cpp"
+])
+
+for compiler in KHook.all_targets:
+    binary = libkhook.Configure(compiler, libkhook.name, 'Release - {0}'.format(compiler.target.arch))
+    binary.compiler.defines += ['KHOOK_STANDALONE', 'KHOOK_EXPORT']
+    binary.compiler.cxxincludes += [
+        os.path.join(builder.currentSourcePath, 'include', ),
+        os.path.join(builder.currentSourcePath, 'third_party', 'safetyhook', 'include')
+    ]
+
+    for task in KHook.libsafetyhook:
+        if task.target.arch == binary.compiler.target.arch:
+            binary.compiler.linkflags += [task.binary]
+
+KHook.libkhook = builder.Add(libkhook)

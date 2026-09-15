@@ -2,10 +2,13 @@
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")" && pwd)"
-plugin="$root/package/addons/srcds_shutdown_fix/bin/srcds_shutdown_fix.so"
+plugin="$root/build/srcds_shutdown_fix.so"
 
 cd "$root"
-sha256sum -c CHECKSUMS.sha256
+if [[ ! -f "$plugin" ]]; then
+    printf 'Build the plugin before running verification.\n' >&2
+    exit 1
+fi
 file "$plugin" | grep -q 'ELF 64-bit.*x86-64'
 
 if readelf -d "$plugin" | grep -qE 'libstdc\+\+|funchook|capstone'; then
