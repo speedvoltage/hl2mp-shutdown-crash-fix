@@ -13,11 +13,12 @@ g++ -std=c++17 -D_GNU_SOURCE -D_LINUX -DLINUX -DPOSIX -DGNUC -DCOMPILER_GCC -DPL
     "$root/tests/test_loader.cpp" -ldl -o "$build/test_loader"
 
 readelf -rW "$build/dedicated_srv.so" | grep -q '__gxx_personality_v0'
-output="$("$build/test_loader" "$build/libsteam_api.so" "$build/dedicated_srv.so" "$root/build/srcds_shutdown_fix.so")"
-expected=$'[META] Loaded SRCDS Shutdown Fix\n[META] SRCDS Shutdown Fix unloaded, but retaining shutdown fix!'
-if [[ "$output" != "$expected" ]]; then
-    printf 'Unexpected runtime output:\n%s\n' "$output" >&2
-    exit 1
-fi
+for mode in classic legacy16 legacy17 modern18 unsupported; do
+    if ! "$build/test_loader" "$build/libsteam_api.so" "$build/dedicated_srv.so" "${PLUGIN_BINARY:-$root/build/srcds_shutdown_fix.so}" "$mode" > "$build/$mode.log" 2>&1; then
+        cat "$build/$mode.log" >&2
+        printf 'Metamod loader test failed: %s\n' "$mode" >&2
+        exit 1
+    fi
+done
 rm -rf "$build"
-printf 'All relocation-fix tests passed.\n'
+printf 'All Metamod loader and relocation tests passed.\n'

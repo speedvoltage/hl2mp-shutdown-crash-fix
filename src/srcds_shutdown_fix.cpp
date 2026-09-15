@@ -89,7 +89,7 @@ void operator delete[](void *memory, size_t) noexcept
 
 namespace
 {
-constexpr const char *kVersion = "1.3.0";
+constexpr const char *kVersion = "1.3.1";
 constexpr const char *kDedicatedModuleName = "dedicated_srv.so";
 constexpr const char *kPersonalitySymbol = "__gxx_personality_v0";
 constexpr const char *kBadProviderName = "libsteam_api.so";
@@ -104,6 +104,7 @@ struct LoadedModule
 };
 
 int g_PluginApiVersion = METAMOD_PLAPI_VERSION;
+bool g_UnsupportedLoader = false;
 void **g_PersonalitySlot = nullptr;
 void *g_OriginalPersonality = nullptr;
 void *g_CorrectPersonality = nullptr;
@@ -488,18 +489,45 @@ ShutdownFixPlugin g_Plugin;
 }
 
 extern "C" __attribute__((visibility("default"))) SourceMM::ISmmPlugin *CreateInterface_MMS(
-    const MetamodVersionInfo *version,
+    const void *version,
     const MetamodLoaderInfo *)
 {
+    g_PluginApiVersion = METAMOD_PLAPI_VERSION;
+    g_UnsupportedLoader = true;
+
     if (!version)
         return nullptr;
 
-    if (version->pl_max < 15 || version->pl_min > METAMOD_PLAPI_VERSION)
+    int api[2];
+    memcpy(api, version, sizeof(api));
+    if (api[0] != 2 || (api[1] != 0 && api[1] != 1))
         return nullptr;
 
-    g_PluginApiVersion = version->pl_max < METAMOD_PLAPI_VERSION ? version->pl_max : METAMOD_PLAPI_VERSION;
+    int limits[2];
+    const size_t offset = api[1] == 0 ? offsetof(MetamodVersionInfo, pl_min) : sizeof(api);
+    memcpy(limits, static_cast<const unsigned char *>(version) + offset, sizeof(limits));
+    const int supported = api[1] == 0 ? 17 : 18;
+    const int selected = limits[1] < supported ? limits[1] : supported;
+    if (limits[0] > limits[1] || selected < limits[0] || selected < (api[1] == 0 ? 16 : 18))
+        return nullptr;
 
+    g_PluginApiVersion = selected;
+    g_UnsupportedLoader = false;
     return &g_Plugin;
+}
+
+extern "C" __attribute__((visibility("default"))) void *CreateInterface(const char *name, int *returnCode)
+{
+    if (!g_UnsupportedLoader && name && strcmp(name, "ISmmPlugin") == 0)
+    {
+        if (returnCode)
+            *returnCode = IFACE_OK;
+        return &g_Plugin;
+    }
+
+    if (returnCode)
+        *returnCode = IFACE_FAILED;
+    return nullptr;
 }
 
 extern "C" __attribute__((visibility("default"))) void UnloadInterface_MMS()

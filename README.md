@@ -1,4 +1,4 @@
-# SRCDS Shutdown Fix 1.3.0
+# SRCDS Shutdown Fix 1.3.1
 
 A Metamod:Source plugin that fixes a Linux x86-64 Source dedicated server crash during shutdown.
 
@@ -12,7 +12,7 @@ quit
 
 causes SRCDS to abort during cancellation of the dedicated console thread. The loaded `dedicated_srv.so` has resolved `__gxx_personality_v0` to the copy exported by `libsteam_api.so` instead of the implementation in `libstdc++.so.6`.
 
-This plugin corrects that one resolved relocation and allows the server to exit normally.
+This plugin corrects that one resolved relocation. Version 1.3.1 also handles Metamod's loader API 2.1 and exports the standard `CreateInterface` factory for older loaders. It supports plugin API versions 16, 17, and 18 without using SourceHook or KHook.
 
 ## Requirements
 
@@ -20,7 +20,7 @@ This plugin corrects that one resolved relocation and allows the server to exit 
 * A Source dedicated server using `dedicated_srv.so`
 * Metamod:Source
 
-Version 1.3.0 is not restricted to the HL2DM Metamod engine provider or the `hl2mp` game directory. It can load under any Metamod engine provider and game directory.
+Version 1.3.1 is not restricted to the HL2DM Metamod engine provider or the `hl2mp` game directory. It can load under any Metamod engine provider and game directory.
 
 The plugin still refuses to modify anything unless it finds the expected x86-64 relocation in the loaded `dedicated_srv.so` and its current target is either the known bad `libsteam_api.so` provider or the already-correct `libstdc++.so.6` provider.
 
@@ -30,8 +30,8 @@ Extract the release archive:
 
 ```bash
 cd /tmp
-tar -xzf ~/Downloads/srcds-shutdown-fix-mms-x64-1.3.0.tar.gz
-cd srcds-shutdown-fix-mms-x64-1.3.0
+tar -xzf ~/Downloads/srcds-shutdown-fix-mms-x64-1.3.1.tar.gz
+cd srcds-shutdown-fix-mms-x64-1.3.1
 ```
 
 Optionally verify the package:

@@ -3,7 +3,7 @@
 #include <cstddef>
 #include "tier1/interface.h"
 
-#define METAMOD_PLAPI_VERSION 17
+#define METAMOD_PLAPI_VERSION 16
 
 class CGlobalVars;
 class ConCommandBase;
